@@ -33,7 +33,7 @@ CucumberHtmlReport.prototype.createReport = function() {
     features: features,
     summary: Summary.calculateSummary(features),
     image: mustacheImageFormatter,
-    duration: mustacheDurationFormatter
+    duration: durationInSeconds
   });
 
   var html = Mustache.to_html(template, mustacheOptions);
@@ -183,5 +183,19 @@ function mustacheDurationFormatter() {
   // https://groups.google.com/forum/#!topic/cukes/itAKGVwJHFg
   return function(text, render) {
     return render(text);
+  };
+}
+
+function durationInSeconds() {
+
+  return function(text, render) {  
+    var text =render(text);
+    var elapsedTime = text / 1000000000;
+    if (elapsedTime >= 60) {
+            data = parseInt(elapsedTime / 60) + 'm ' + (elapsedTime % 60).toFixed(0) + 's';
+        } else {
+            data =  elapsedTime.toFixed(2) + 's';
+        }      
+    return data;
   };
 }
