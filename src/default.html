@@ -163,7 +163,8 @@
 
         </table>
 
-        {{#plainTextMetadata}}<p>{{.}}</p>{{/plainTextMetadata}}
+        {{#plainTextMetadata}}<p><pre>{{.}}</pre>{{/plainTextMetadata}}
+        {{#htmlTextMetadata}}<p>{{{.}}}</p>{{/htmlTextMetadata}}
         {{#image}}{{imageName}}{{/image}}
         {{/elements}}
       </section>

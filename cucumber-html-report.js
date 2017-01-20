@@ -383,6 +383,13 @@ function saveEmbeddedMetadata(destPath, element, steps) {
           var decodedText = atob(embedding.data);
           element.plainTextMetadata.push(decodedText);
         }
+        else if (embedding.mime_type === 'text/html') {
+          // Save html text on element so we use as embeded HTML
+          element.htmlTextMetadata = element.htmlTextMetadata || [];
+
+          var decodedText = atob(embedding.data);
+          element.htmlTextMetadata.push(decodedText);
+        }
       });
     }
   });
