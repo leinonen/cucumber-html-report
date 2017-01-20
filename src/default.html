@@ -165,7 +165,7 @@
 
         {{#plainTextMetadata}}<p><pre>{{.}}</pre>{{/plainTextMetadata}}
         {{#htmlTextMetadata}}<p>{{{.}}}</p>{{/htmlTextMetadata}}
-        {{#image}}{{imageName}}{{/image}}
+        {{#inlineImage}}<img src="data:{{mime_type}};base64,{{data}}"/>{{/inlineImage}}
         {{/elements}}
       </section>
       {{/features}}

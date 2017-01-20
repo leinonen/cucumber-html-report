@@ -370,11 +370,12 @@ function saveEmbeddedMetadata(destPath, element, steps) {
     if (step.embeddings) {
       step.embeddings.forEach(function(embedding) {
         if (embedding.mime_type === "image/png") {
-          var imageName = createFileName(element.name + "-" + element.line) + ".png";
-          var fileName = path.join(destPath, imageName);
-          // Save imageName on element so we use it in HTML
-          element.imageName = imageName;
-          writeImage(fileName, embedding.data);
+          // var imageName = createFileName(element.name + '-' + element.line) + '.png';
+          // var fileName = path.join(destPath, imageName);
+          // // Save imageName on element so we use it in HTML
+          // element.imageName = imageName;
+          // writeImage(fileName, embedding.data);
+          element.inlineImage = embedding;
         }
         else if (embedding.mime_type === "text/plain") {
           // Save plain text on element so we use it in HTML
