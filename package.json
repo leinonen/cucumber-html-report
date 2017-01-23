@@ -1,6 +1,6 @@
 {
   "name": "cucumber-html-report",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "Convert cucumber reports from json to HTML using Mustache templates",
   "homepage": "https://github.com/leinonen/cucumber-html-report",
   "author": {

@@ -1,0 +1,355 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <style type="text/css">
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #fff;
+      color: #282828;
+    }
+
+    .feature-navigator {
+      position: fixed;
+      overflow-y: auto;
+      height: 100%;
+      width: 20%;
+      float: left;
+    }
+
+    .report-container {
+      margin-top: 60px;
+      margin-left: 20%;
+      width: 75%;
+      float: left;
+    }
+
+    a, a:hover, a:visited {
+      color: #000;
+      text-decoration: none;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      text-align: left;
+      background-color: #eee;
+      color: #999;
+      text-transform: capitalize;
+    }
+
+    th, td {
+      padding: 5px 10px;
+      border-bottom: rgba(162, 162, 162, 0.16) 1px solid;
+    }
+
+    tr.failed { cursor: pointer; }
+
+    tr.passed td { background-color: rgb(150, 250, 150); }
+    tr.failed td { background-color: rgb(250, 150, 150); }
+
+    td.status {
+      text-transform: capitalize;
+    }
+
+    .datatable {
+      margin-left: 2em;
+      width: auto;
+      border-width: 1pt;
+      margin-top: 0.6em;
+      font-size: 80%;
+    }
+    .datatable td {
+      border: rgba(162, 162, 162, 0.16) 1px solid;
+    }
+
+    h1 {
+      margin: 0;
+      padding: 20px 10px 10px 10px;
+      color: #282828;
+    }
+
+    h2 {
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+
+    h2.component {
+      color: #282828;
+      padding: 0 10px 10px 10px;
+    }
+
+    h3 { margin: 25px 0 10px 0; }
+
+    img {
+      max-width: 100%;
+      margin-top: 10px;
+    }
+
+    .filename {
+      margin: 0 0 10px 0;
+      color: #999;
+    }
+
+    span.tags {
+      float: right;
+      font-size: 15px;
+      color: #888;
+    }
+
+    span.scenario-tag {
+      float: right;
+      font-size: 15px;
+      color: #888;
+      margin-left: 0.5em;
+    }
+
+    p.story {
+      font-size: 20px;
+      color: #888;
+      font-style: italic;
+      padding-left: 20px;
+    }
+
+    div.report {
+      width: 100%;
+      float: left;
+      padding: 10px;
+      background: #fff;
+      padding-bottom: 10px;
+    }
+
+    td.result,
+    .duration { text-align: right; }
+
+
+    .header {
+      width: 100%;
+      float: left;
+    }
+
+    .summary,
+    .feature-list,
+    .scenario-list {
+      list-style-type: none;
+      margin: 0;
+      padding: 10px;
+    }
+
+    .summary li,
+    .feature-list li,
+    .scenario-list li { padding: 10px; }
+
+    .scenario-list li a { color: #999; }
+
+    .summary li { padding: 5px 10px; }
+
+    .feature-list li {
+      border-top: rgba(162, 162, 162, 0.16) 1px solid;
+      border-bottom: rgba(162, 162, 162, 0.16) 1px solid;
+    }
+
+    .scenario-list li { border: none; }
+
+    .scenario-list { padding: 10px 0; }
+
+    .summary li,
+    .feature-list li { font-weight: bold; }
+
+    .scenario-list li { font-weight: normal; }
+
+    .feature-list > li.passed { border-left: 5px solid rgb(150, 250, 150); }
+    .feature-list > li.failed { border-left: 5px solid rgb(250, 150, 150); }
+
+    .scenario-list > li.passed a { color: #999; }
+    .scenario-list > li.failed a { color: rgb(250, 150, 150); }
+
+    .summary span.OK  { color: rgb(150, 250, 150); }
+    .summary span.NOK { color: rgb(250, 150, 150); }
+
+    .footer {
+      color: #3C494C;
+      text-align: center;
+      padding: 20px 0;
+      float: left;
+      width: 100%;
+    }
+
+    .footer a, footer a:visited { color: #3C494C; }
+
+    .copy-to-clipboard { /* as small as possible - when hidden, copy will not work */
+      width: 2em;
+      height: 2em;
+      position: fixed;
+      top: 0;
+      left: 0;
+      border: none;
+      outline: none;
+      boxShadow: none;
+    }
+
+    @media (max-width: 500px) {
+      .feature-navigator {
+        position: relative;
+        height: auto;
+        width: 100%;
+        clear: both;
+        overflow: auto;
+      }
+      .report-container {
+        margin-top: 1em;
+        margin-left: auto;
+        width: 100%
+      }
+    }
+  </style>
+  <title>{{title}}</title>
+</head>
+<body>
+
+<div class="feature-navigator">
+  <div class="header">
+    <h1>{{title}}</h1>
+
+    <h2 class="component">{{component}}</h2>
+  </div>
+
+  <ul class="summary">
+    <li>{{summary.totalFeatures}} Features</li>
+    <li>{{summary.totalScenarios}} Scenarios</li>
+    <li>{{summary.scenariosPassed}} Passed scenarios</li>
+    <li>{{summary.scenariosFailed}} Failing scenarios</li>
+    <li>Status <span class="{{summary.status}}">{{summary.status}}</span></li>
+  </ul>
+
+  <ul class="feature-list">
+    {{#features}}
+    <li class="{{status}}">
+      <a href="#F_{{id}}">{{name}}</a>
+      <ul class="scenario-list">
+        {{#elements}}
+        <li class="{{status}}"><a href="#S_{{id}}">{{name}}</a></li>
+        {{/elements}}
+      </ul>
+    </li>
+    {{/features}}
+  </ul>
+</div>
+
+<div class="report-container">
+  {{#features}}
+  <div class="report" id="F_{{id}}">
+    <h2>{{keyword}}: {{name}} <span class="tags">{{tags}}</span></h2>
+
+    <p class="filename">{{uri}}</p>
+
+    <p class="story">{{description}}</p>
+    {{#elements}}
+    <h3 id="S_{{id}}">
+      {{keyword}}: {{name}}
+      {{#tags}}
+      <span class="scenario-tag">{{name}}</span>
+      {{/tags}}
+    </h3>
+
+    <table>
+      <tr>
+        <th style="width: 100px;">Condition</th>
+        <th>Step</th>
+        <th style="width: 100px;">Line</th>
+        <th class="duration" style="width: 100px;">Duration</th>
+        <th style="width: 100px;">Status</th>
+      </tr>
+
+      {{#steps}}
+      <tr class="{{result.status}}">
+        <td>{{keyword}}</td>
+        <td>
+          {{name}}
+          <table class="datatable">
+            <!-- {{#rows}} -->
+            <tr>
+              <!-- {{#cells}} -->
+                <td>{{.}}</td>
+              <!-- {{/cells}} -->
+            </tr>
+            <!-- {{/rows}} -->
+          </table>
+        </td>
+        <td>{{line}}</td>
+        <td class="duration">{{#duration}}{{result.duration}}{{/duration}}</td>
+        <td class="status">{{result.status}}</td>
+      </tr>
+
+      </tr>
+      {{/steps}}
+
+    </table>
+
+    {{#plainTextMetadata}}<p>{{.}}</p>{{/plainTextMetadata}}
+    {{#image}}{{imageName}}{{/image}}
+    {{/elements}}
+  </div>
+  {{/features}}
+</div>
+
+<div class="footer">
+  <p><a href="https://github.com/leinonen/cucumber-html-report">Cucumber HTML Report Generator</a> by <a
+    href="http://leinonen.se">Peter Leinonen</a> 2016.</p>
+</div>
+
+<script type="text/javascript">
+  (function() {
+    'use strict';
+
+    // Thanks to http://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript/30810322#30810322
+    function copyTextToClipboard(text) {
+      // Puts the supplied text into a hidden text area to select it and copy it the clipboard
+      var textArea = document.createElement("textarea");
+      textArea.class = 'copy-to-clipboard';
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand('copy');
+      } finally {
+        document.body.removeChild(textArea);
+      }
+    }
+
+    var failed = document.getElementsByClassName('failed');
+    for (var i = 0; i < failed.length; i += 1) {
+      if (failed[i].className === 'failed') {
+        failed[i].addEventListener('click', (function(i) {
+          return function() {
+            if (failed[i].nextElementSibling.classList.contains('hidden')) {
+              failed[i].nextElementSibling.classList.remove('hidden');
+            } else {
+              failed[i].nextElementSibling.classList.add('hidden');
+            }
+            copyTextToClipboard(failed[i].nextElementSibling.textContent);
+          }
+        })(i));
+      }
+      else if (failed[i].classList.contains('hidden')) {
+        console.log('elif here');
+        failed[i].addEventListener('click', (function(i) {
+          return function() {
+            console.log('im here now');
+            if (failed[i].classList.contains('hidden')) {
+              failed[i].classList.remove('hidden');
+            } else {
+              failed[i].classList.add('hidden');
+            }
+          }
+        })(i));
+      }
+    }
+  })(window);
+</script>
+</body>
+</html>
