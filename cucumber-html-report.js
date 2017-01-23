@@ -371,13 +371,15 @@ function saveEmbeddedMetadata(destPath, element, steps) {
       var imgCount = 1;
       step.embeddings.forEach(function(embedding) {
         if (embedding.mime_type === "image/png") {
-          var imageName = createFileName(element.name + "-" + element.line + "-" + imgCount) + ".png";
-          var fileName = path.join(destPath, imageName);
-          // Save imageName on element so we use it in HTML
-          element.imageName = element.imageName || [];
-          element.imageName.push(imageName);
-          writeImage(fileName, embedding.data);
-          ++imgCount;
+//          var imageName = createFileName(element.name + "-" + element.line + "-" + imgCount) + ".png";
+//          var fileName = path.join(destPath, imageName);
+//          // Save imageName on element so we use it in HTML
+//          element.imageName = element.imageName || [];
+//          element.imageName.push(imageName);
+//          writeImage(fileName, embedding.data);
+//          ++imgCount;
+          element.inlineImage = embedding;
+
         }
         else if (embedding.mime_type === "text/plain") {
           // Save plain text on element so we use it in HTML
@@ -385,6 +387,13 @@ function saveEmbeddedMetadata(destPath, element, steps) {
 
           var decodedText = atob(embedding.data);
           element.plainTextMetadata.push(decodedText);
+        }
+        else if (embedding.mime_type === 'text/html') {
+          // Save html text on element so we use as embeded HTML
+          element.htmlTextMetadata = element.htmlTextMetadata || [];
+
+          var decodedText = atob(embedding.data);
+          element.htmlTextMetadata.push(decodedText);
         }
       });
     }

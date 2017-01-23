@@ -163,8 +163,9 @@
 
         </table>
 
-        {{#plainTextMetadata}}<p>{{.}}</p>{{/plainTextMetadata}}
-        {{#image}}{{imageName}}{{/image}}
+        {{#plainTextMetadata}}<p><pre>{{.}}</pre>{{/plainTextMetadata}}
+        {{#htmlTextMetadata}}<p>{{{.}}}</p>{{/htmlTextMetadata}}
+        {{#inlineImage}}<img src="data:{{mime_type}};base64,{{data}}"/>{{/inlineImage}}
         {{/elements}}
       </section>
       {{/features}}
