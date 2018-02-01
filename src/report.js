@@ -310,7 +310,11 @@ function parseFeatures (options, features) {
 
 function createFileName (name) {
   /* eslint-disable no-control-regex */
-  return name.replace(/[^\x00-\x7F]/g, '').replace(/\s/g, '_').toLowerCase()
+  return name.toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^\x00-\x7F]/g, '')
+      .replace(/([/\s'\-,\-])+/g, '_')
 }
 
 function writeHTML (targetDirectory, reportName, html) {
