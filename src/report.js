@@ -314,7 +314,7 @@ function createFileName (name) {
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
       .replace(/[^\x00-\x7F]/g, '')
-      .replace(/([/\s'\-,\-])+/g, '_')
+      .replace(/([/\s'\-,])+/g, '_')
 }
 
 function writeHTML (targetDirectory, reportName, html) {
